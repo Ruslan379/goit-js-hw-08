@@ -16,7 +16,11 @@ var r,o,i;i=function(){var t,r,o,i=Object.prototype.toString,a="undefined"!=type
 //! Работает!
 //! old ++++++++++++++++++++++++++++++++++++ (без throttle)
 //! old ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-K.on("timeupdate",e(A)((function(e){var t=e.seconds;localStorage.setItem("videoplayer-current-time",JSON.stringify(t)),console.log(Number(localStorage.getItem("videoplayer-current-time")))}
-//! Save to localStorage => currentTime:
-),1e3));var Z=Number(localStorage.getItem("videoplayer-current-time"));K.setCurrentTime(Z).then((function(e){})).catch((function(e){e.name}))}();
-//# sourceMappingURL=02-video.b5f6048d.js.map
+K.on("timeupdate",e(A)((function(e){localStorage.setItem("videoplayer-current-time",e.seconds),
+//! Консолит currentTimePlayer:
+console.log(Number(localStorage.getItem("videoplayer-current-time")))}
+//! Save to currentTimePlayer => localStorage:
+),1e3));var Z=Number(localStorage.getItem("videoplayer-current-time"));
+//! возобновляет воспроизведение с сохраненной позиции = currentTimePlayer:
+K.setCurrentTime(Z)}();
+//# sourceMappingURL=02-video.1ea26ce3.js.map
