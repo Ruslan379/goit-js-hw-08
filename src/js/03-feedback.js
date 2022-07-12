@@ -2,39 +2,86 @@ import throttle from 'lodash.throttle';
 
 const refs = {
   form: document.querySelector('.feedback-form'),
+  email: document.querySelector('.feedback-form  input'),
+  textarea: document.querySelector('.feedback-form  textarea'),
 };
 
-refs.form.addEventListener('submit', handleSubmit);
-// console.log(refs.form);
-// console.log(refs.form.elements);
-// console.log(refs.form.elements.email);
+refs.form.addEventListener('submit', throttle(onFormSubmit, 500));
+refs.email.addEventListener('input', onEmailInput);
+refs.textarea.addEventListener('input', onTextareaInput);
+// refs.textarea.addEventListener('input', throttle(onTextareaInput, 100));
 
-function handleSubmit(event) {
-  event.preventDefault();
+let formData = {};
+let savedEmail = '';
+let savedMessage = '';
 
-  const {
-    elements: { email, message },
-  } = event.currentTarget;
+// console.log(formData);
 
-  // console.log(event.currentTarget.elements);
+populateTextarea();
 
-  if (email.value === '' || message.value === '')
+/*
+ ! - Останавливаем поведение по умолчанию
+ ! - Убираем сообщение из хранилища
+ ! - Очищаем форму
+ */
+
+function onFormSubmit(evt) {
+  evt.preventDefault();
+
+  // console.log('Отправляем форму'); //!
+  if (refs.email.value === '' || refs.textarea.value === '')
     return alert('Все поля должны быть заполнены!');
 
-  const formOut = {};
-  formOut.email = email.value;
-  formOut.message = message.value;
-  console.log(formOut); //! По ТЗ: Вывод в косоль обьекта с введенными данными
+  console.log(formData);
 
-  const formData = new FormData(event.currentTarget); //? FormData
+  localStorage.removeItem('feedback-form-state');
 
-  formData.forEach((value, name) => {
-    // console.log('onFormSubmit -> name', name);
-    // console.log('onFormSubmit -> value', value);
-    console.log(`${name}: ${value}`); //! Вывод в косоль с помощью FormData
-  });
+  evt.currentTarget.reset();
+  //   localStorage.removeItem(MESSAGE);
+  //   localStorage.removeItem(EMAIL);
+}
 
-  console.log(`Email: ${email.value}, Message: ${message.value}`); //! Вывод в косоль с помощью шаблонной строки
+//!++++++++++++++++++++++++++++++++++++++++
+function onEmailInput(evt) {
+  // console.log('Заполняем Email'); //!
 
-  event.currentTarget.reset();
+  // let savedEmail = evt.target.value; //!
+
+  formData[evt.target.name] = evt.target.value;
+  // console.log(formData); //!
+
+  localStorage.setItem('feedback-form-state', JSON.stringify(formData));
+  // localStorage.setItem(EMAIL, email);
+}
+//!++++++++++++++++++++++++++++++++++++++++
+
+/*
+   ! - Получаем значение поля
+   ! - Сохраняем его в хранилище
+   ! - Можно добавить throttle
+   */
+function onTextareaInput(evt) {
+  // console.log('Заполняем Message'); //!
+
+  // let savedMessage = evt.target.value; //!
+  // console.log(savedMessage); //!
+
+  formData[evt.target.name] = evt.target.value;
+  // console.log(formData); //!
+
+  localStorage.setItem('feedback-form-state', JSON.stringify(formData));
+}
+
+/*
+   ! - Получаем значение из хранилища
+   ! - Если там что-то было, обновляем DOM
+   */
+function populateTextarea() {
+  if (localStorage.getItem('feedback-form-state')) {
+    formData = JSON.parse(localStorage.getItem('feedback-form-state'));
+
+    if (formData.email) refs.email.value = formData.email;
+
+    if (formData.message) refs.textarea.value = formData.message;
+  }
 }
