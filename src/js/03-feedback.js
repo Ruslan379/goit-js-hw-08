@@ -6,17 +6,14 @@ const refs = {
   textarea: document.querySelector('.feedback-form  textarea'),
 };
 
-refs.form.addEventListener('submit', throttle(onFormSubmit, 500));
-refs.email.addEventListener('input', onEmailInput);
-refs.textarea.addEventListener('input', onTextareaInput);
-// refs.textarea.addEventListener('input', throttle(onTextareaInput, 100));
+refs.form.addEventListener('submit', onFormSubmit);
+refs.email.addEventListener('input', throttle(onEmailInput, 500));
+refs.textarea.addEventListener('input', throttle(onTextareaInput, 500));
 
+//! - Создаем пустой объект для хранения localStorage
 let formData = {};
-let savedEmail = '';
-let savedMessage = '';
 
-// console.log(formData);
-
+//! - Получаем значение из localStorage
 populateTextarea();
 
 /*
@@ -37,35 +34,22 @@ function onFormSubmit(evt) {
   localStorage.removeItem('feedback-form-state');
 
   evt.currentTarget.reset();
-  //   localStorage.removeItem(MESSAGE);
-  //   localStorage.removeItem(EMAIL);
 }
 
-//!++++++++++++++++++++++++++++++++++++++++
+//!+++++++++ Заполняем поле Email ++++++++++++++
 function onEmailInput(evt) {
   // console.log('Заполняем Email'); //!
 
-  // let savedEmail = evt.target.value; //!
-
   formData[evt.target.name] = evt.target.value;
   // console.log(formData); //!
 
   localStorage.setItem('feedback-form-state', JSON.stringify(formData));
-  // localStorage.setItem(EMAIL, email);
 }
-//!++++++++++++++++++++++++++++++++++++++++
 
-/*
-   ! - Получаем значение поля
-   ! - Сохраняем его в хранилище
-   ! - Можно добавить throttle
-   */
+//!+++++++++ Заполняем поле Message ++++++++++++++
 function onTextareaInput(evt) {
   // console.log('Заполняем Message'); //!
 
-  // let savedMessage = evt.target.value; //!
-  // console.log(savedMessage); //!
-
   formData[evt.target.name] = evt.target.value;
   // console.log(formData); //!
 
@@ -73,9 +57,10 @@ function onTextareaInput(evt) {
 }
 
 /*
-   ! - Получаем значение из хранилища
-   ! - Если там что-то было, обновляем DOM
-   */
+ ! - Получаем значение из localStorage, 
+ ! - и если там что-то было, 
+ ! - то обновляем поля этими знчениями
+ */
 function populateTextarea() {
   if (localStorage.getItem('feedback-form-state')) {
     formData = JSON.parse(localStorage.getItem('feedback-form-state'));
