@@ -6,14 +6,17 @@ const refs = {
   textarea: document.querySelector('.feedback-form  textarea'),
 };
 
+//! - Создаем пустой объект для хранения ключей и значений из localStorage
+let formData = {};
+
+//! - Создаем переменную STORAGE_KEY для хранения ключа localStorage
+const STORAGE_KEY = 'feedback-form-state';
+
 refs.form.addEventListener('submit', onFormSubmit);
 refs.email.addEventListener('input', throttle(onEmailInput, 500));
 refs.textarea.addEventListener('input', throttle(onTextareaInput, 500));
 
-//! - Создаем пустой объект для хранения localStorage
-let formData = {};
-
-//! - Получаем значение из localStorage
+//! - Получаем значение из localStorage после перезагрузки страницы
 populateTextarea();
 
 /*
@@ -31,7 +34,7 @@ function onFormSubmit(evt) {
 
   console.log(formData);
 
-  localStorage.removeItem('feedback-form-state');
+  localStorage.removeItem(STORAGE_KEY);
 
   evt.currentTarget.reset();
 }
@@ -43,7 +46,7 @@ function onEmailInput(evt) {
   formData[evt.target.name] = evt.target.value;
   // console.log(formData); //!
 
-  localStorage.setItem('feedback-form-state', JSON.stringify(formData));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
 }
 
 //!+++++++++ Заполняем поле Message ++++++++++++++
@@ -53,17 +56,17 @@ function onTextareaInput(evt) {
   formData[evt.target.name] = evt.target.value;
   // console.log(formData); //!
 
-  localStorage.setItem('feedback-form-state', JSON.stringify(formData));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
 }
 
 /*
- ! - Получаем значение из localStorage, 
+ ! - Получаем значение из localStorage после перезагрузки страницы, 
  ! - и если там что-то было, 
- ! - то обновляем поля этими знчениями
+ ! - то обновляем поля этими значениями из formData
  */
 function populateTextarea() {
-  if (localStorage.getItem('feedback-form-state')) {
-    formData = JSON.parse(localStorage.getItem('feedback-form-state'));
+  if (localStorage.getItem(STORAGE_KEY)) {
+    formData = JSON.parse(localStorage.getItem(STORAGE_KEY));
 
     if (formData.email) refs.email.value = formData.email;
 
