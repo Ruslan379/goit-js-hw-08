@@ -18,5 +18,9 @@ h.insertAdjacentHTML("beforeend",p),
 //!   4.Сосдаем слушателя событий методом делегирования:
 h.addEventListener("click",(
 //!   4.1.Ф-ция, к-рая прослушивает клики от ВСЕХ изображений:
-function(e){e.preventDefault(),new(t(i))(".gallery a",{captionPosition:"bottom",captionDelay:250,captionsData:"alt"}).on("show.simplelightbox",(function(){}))}));
-//# sourceMappingURL=01-gallery.d8ddc972.js.map
+function(t){t.preventDefault(),
+//! Использование библиотеки SimpleLightbox:
+m.on("show.simplelightbox",(function(){}))}));
+//! 1.2.Вызов библиотеки SimpleLightbox:
+let m=new(t(i))(".gallery a",{captionPosition:"bottom",captionDelay:250,captionsData:"alt"});
+//# sourceMappingURL=01-gallery.141c14a8.js.map
