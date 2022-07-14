@@ -42,8 +42,8 @@ ImageContainer.addEventListener('click', onImageContainerClick);
 //!   1.1.Ф-ция, к-рая создает массив с новой разметкой:
 function createImageCardsMarkup() {
     return galleryItems
-    .map(({ preview, original, description }) => {
-    return `
+        .map(({ preview, original, description }) => {
+            return `
         <div class="gallery__item">
         <a class="gallery__link" href="${original}">
         <img
@@ -55,9 +55,25 @@ function createImageCardsMarkup() {
         </a>
         </div>
     `;
-    })
-    .join('');
+        })
+        .join('');
+
+
+
+
+    // gallery.on('show.simplelightbox', function () {
+    // });
 }
+
+//? Fixed mentor remarks
+//! 1.2.Вызов библиотеки SimpleLightbox:
+
+let gallery = new SimpleLightbox('.gallery a', {
+    // caption: true,
+    captionPosition: 'bottom',
+    captionDelay: 250,
+    captionsData: "alt",
+});
 
 //!   4.1.Ф-ция, к-рая прослушивает клики от ВСЕХ изображений:
 function onImageContainerClick(evt) {
@@ -70,14 +86,19 @@ function onImageContainerClick(evt) {
     // console.log("++++++++++++++++++++++++++++++++++++++++++++++");
 
 
-    //! Использование библиотеки SimpleLightbox:
+    /*
+        ? - Fixed mentor remarks -
+        ? - тут вызова библиотеке не должно быть, 
+        ? - так как каждый новый клик создает новый экземпляр билиотеки
+    */
+    // let gallery = new SimpleLightbox('.gallery a', {
+    //     // caption: true,
+    //     captionPosition: 'bottom',
+    //     captionDelay: 250,
+    //     captionsData: "alt",
+    // });
 
-    let gallery = new SimpleLightbox('.gallery a', {
-        // caption: true,
-        captionPosition: 'bottom',  
-        captionDelay: 250,
-        captionsData: "alt",
-    });
+    //! Использование библиотеки SimpleLightbox:
 
     gallery.on('show.simplelightbox', function () {
     });

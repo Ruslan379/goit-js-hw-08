@@ -28,7 +28,7 @@ populateTextarea();
 function onFormSubmit(evt) {
   evt.preventDefault();
 
-  // console.log('Отправляем форму'); //!
+  console.log('Отправляем форму'); //!
   if (refs.email.value === '' || refs.textarea.value === '')
     return alert('Все поля должны быть заполнены!');
 
@@ -37,6 +37,8 @@ function onFormSubmit(evt) {
   localStorage.removeItem(STORAGE_KEY);
 
   evt.currentTarget.reset();
+
+  formData = {}; //? Fixed mentor remarks
 }
 
 //!+++++++++ Заполняем поле Email ++++++++++++++
